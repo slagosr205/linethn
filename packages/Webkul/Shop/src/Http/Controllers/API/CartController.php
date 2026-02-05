@@ -29,10 +29,15 @@ class CartController extends APIController
      */
     public function index(): JsonResource
     {
-        Cart::collectTotals();
+        $cart = Cart::getCart();
+
+        if ($cart) {
+            Cart::collectTotals();
+            $cart = Cart::getCart();
+        }
 
         $response = [
-            'data' => ($cart = Cart::getCart()) ? new CartResource($cart) : null,
+            'data' => $cart ? new CartResource($cart) : null,
         ];
 
         if (session()->has('info')) {

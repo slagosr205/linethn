@@ -17,6 +17,13 @@ class Controller extends ImageCacheController
     protected $template;
 
     /**
+     * Current filename being processed.
+     *
+     * @var string
+     */
+    protected $currentFilename;
+
+    /**
      * Logo.
      *
      * @var string
@@ -33,6 +40,19 @@ class Controller extends ImageCacheController
      */
     public function getResponse($template, $filename)
     {
+        /**
+         * Serve from disk cache if the static file already exists.
+         * This avoids Intervention Image processing on repeat requests.
+         */
+        $staticPath = public_path('cache/' . $template . '/' . $filename);
+
+        if (file_exists($staticPath) && strtolower($template) !== 'download') {
+            $this->template = $template;
+            $content = file_get_contents($staticPath);
+
+            return $this->buildResponse($content);
+        }
+
         switch (strtolower($template)) {
             case 'original':
                 return $this->getOriginal($filename);
@@ -55,6 +75,7 @@ class Controller extends ImageCacheController
     public function getImage($template, $filename)
     {
         $this->template = $template;
+        $this->currentFilename = $filename;
 
         $cacheTime = $template == 'logo' ? 10080 : config('imagecache.lifetime');
 
@@ -93,6 +114,21 @@ class Controller extends ImageCacheController
             }
 
             $content = '';
+        }
+
+        /**
+         * Save processed image to disk as a static file.
+         * Next request will serve it directly without Intervention processing.
+         */
+        if ($content && isset($this->currentFilename)) {
+            $staticPath = public_path('cache/' . $this->template . '/' . $this->currentFilename);
+            $staticDir = dirname($staticPath);
+
+            if (! is_dir($staticDir)) {
+                @mkdir($staticDir, 0755, true);
+            }
+
+            @file_put_contents($staticPath, $content);
         }
 
         return $this->buildResponse($content);

@@ -96,7 +96,8 @@
             "Webkul\\Tax\\": "packages/Webkul/Tax/src",
             "Webkul\\Theme\\": "packages/Webkul/Theme/src",
             "Webkul\\User\\": "packages/Webkul/User/src",
-            "Webkul\\LinethPayment\\": "packages/Webkul/LinethPayment/src"
+            "Webkul\\LinethPayment\\": "packages/Webkul/LinethPayment/src",
+            "Linethhn\\HondurasPay\\": "packages/Linethhn/HondurasPay/src"
         }
     },
     "autoload-dev": {

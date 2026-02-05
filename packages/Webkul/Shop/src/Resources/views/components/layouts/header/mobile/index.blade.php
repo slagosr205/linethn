@@ -8,7 +8,7 @@
     $showWishlist = (bool) core()->getConfigData('customer.settings.wishlist.wishlist_option');
 @endphp
 
-<div class="flex flex-wrap gap-4 px-4 pb-4 pt-6 shadow-sm lg:hidden">
+<div class="flex flex-wrap gap-4 px-4 pb-4 pt-6 shadow-luxury bg-white border-b border-gold-200/30 lg:hidden">
     <div class="flex w-full items-center justify-between">
         <!-- Left Navigation -->
         <div class="flex items-center gap-x-1.5">
@@ -90,14 +90,14 @@
 
                                     <a
                                         href="{{ route('shop.customer.session.create') }}"
-                                        class="m-0 mx-auto block w-max cursor-pointer rounded-2xl bg-navyBlue px-7 py-4 text-center text-base font-medium text-white ltr:ml-0 rtl:mr-0"
+                                        class="primary-button m-0 mx-auto block w-max px-7 text-center text-base ltr:ml-0 rtl:mr-0"
                                     >
                                         @lang('shop::app.components.layouts.header.mobile.sign-in')
                                     </a>
 
                                     <a
                                         href="{{ route('shop.customers.register.index') }}"
-                                        class="m-0 mx-auto block w-max cursor-pointer rounded-2xl border-2 border-navyBlue bg-white px-7 py-3.5 text-center text-base font-medium text-navyBlue ltr:ml-0 rtl:mr-0"
+                                        class="secondary-button m-0 mx-auto block w-max px-7 text-center text-base ltr:ml-0 rtl:mr-0"
                                     >
                                         @lang('shop::app.components.layouts.header.mobile.sign-up')
                                     </a>
@@ -216,7 +216,7 @@
 
             <input
                 type="text"
-                class="block w-full rounded-xl border border-['#E3E3E3'] px-11 py-3.5 text-sm font-medium text-gray-900 max-md:rounded-lg max-md:px-10 max-md:py-3 max-md:font-normal max-sm:text-xs"
+                class="block w-full rounded-sm border border-gold-200/40 bg-luxury-cream px-11 py-3.5 text-sm font-medium text-luxury-black max-md:rounded-sm max-md:px-10 max-md:py-3 max-md:font-normal max-sm:text-xs focus:border-gold-400 focus:ring-1 focus:ring-gold-400/30 transition-all duration-300"
                 name="query"
                 value="{{ request('query') }}"
                 placeholder="@lang('shop::app.components.layouts.header.mobile.search-text')"
@@ -258,8 +258,8 @@
 
             <x-slot:content class="!p-0">
                 <!-- Account Profile Hero Section -->
-                <div class="border-b border-zinc-200 p-4">
-                    <div class="grid grid-cols-[auto_1fr] items-center gap-4 rounded-xl border border-zinc-200 p-2.5">
+                <div class="border-b border-gold-200/30 p-4">
+                    <div class="grid grid-cols-[auto_1fr] items-center gap-4 rounded-sm border border-gold-200/30 p-2.5 bg-luxury-cream">
                         <div>
                             <img
                                 src="{{ auth()->user()?->image_url ??  bagisto_asset('images/user-placeholder.png') }}"

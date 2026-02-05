@@ -44,4 +44,5 @@ return [
     Webkul\Theme\Providers\ThemeServiceProvider::class,
     Webkul\User\Providers\UserServiceProvider::class,
     Webkul\LinethPayment\Providers\LinethPaymentServiceProvider::class,
+    Linethhn\HondurasPay\Providers\HondurasPayServiceProvider::class,
 ];

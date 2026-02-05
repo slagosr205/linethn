@@ -3,6 +3,7 @@
 namespace Webkul\Shop\Http\Controllers\API;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 use Webkul\Category\Repositories\CategoryRepository;
 use Webkul\Marketing\Jobs\UpdateCreateSearchTerm as UpdateCreateSearchTermJob;
 use Webkul\Product\Repositories\ProductRepository;
@@ -29,13 +30,20 @@ class ProductController extends APIController
             $searchEngine = core()->getConfigData('catalog.products.search.storefront_mode');
         }
 
-        $products = $this->productRepository
-            ->setSearchEngine($searchEngine ?? 'database')
-            ->getAll(array_merge(request()->query(), [
-                'channel_id'           => core()->getCurrentChannel()->id,
-                'status'               => 1,
-                'visible_individually' => 1,
-            ]));
+        $channelId = core()->getCurrentChannel()->id;
+        $queryParams = array_merge(request()->query(), [
+            'channel_id'           => $channelId,
+            'status'               => 1,
+            'visible_individually' => 1,
+        ]);
+
+        $cacheKey = 'products_' . md5(serialize($queryParams) . '_' . ($searchEngine ?? 'database'));
+
+        $products = Cache::remember($cacheKey, 300, function () use ($queryParams, $searchEngine) {
+            return $this->productRepository
+                ->setSearchEngine($searchEngine ?? 'database')
+                ->getAll($queryParams);
+        });
 
         if (! empty(request()->query('query'))) {
             /**
@@ -46,7 +54,7 @@ class ProductController extends APIController
                 UpdateCreateSearchTermJob::dispatch([
                     'term'       => request()->query('query'),
                     'results'    => $products->total(),
-                    'channel_id' => core()->getCurrentChannel()->id,
+                    'channel_id' => $channelId,
                     'locale'     => app()->getLocale(),
                 ]);
             }

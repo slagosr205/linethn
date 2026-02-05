@@ -15,10 +15,13 @@
             class="container mt-20 max-lg:px-8 max-md:mt-8 max-sm:mt-7 max-sm:!px-4"
             v-if="! isLoading && products.length"
         >
-            <div class="flex justify-between">
-                <h2 class="font-dmserif text-3xl max-md:text-2xl max-sm:text-xl">
-                    @{{ title }}
-                </h2>
+            <div class="flex justify-between items-end mb-6">
+                <div class="relative">
+                    <h2 class="font-playfair text-4xl font-semibold text-charcoal max-md:text-3xl max-sm:text-2xl relative z-10">
+                        @{{ title }}
+                    </h2>
+                    <div class="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-yellow-500 opacity-60 rounded-full"></div>
+                </div>
 
                 <div class="flex items-center justify-between gap-8">
                     <a
@@ -62,14 +65,14 @@
                 class="flex gap-8 pb-2.5 [&>*]:flex-[0] mt-10 overflow-auto scroll-smooth scrollbar-hide max-md:gap-7 max-md:mt-5 max-sm:gap-4 max-md:pb-0 max-md:whitespace-nowrap"
             >
                 <x-shop::products.card
-                    class="min-w-[291px] max-md:h-fit max-md:min-w-56 max-sm:min-w-[192px]"
+                    class="min-w-[291px] max-md:h-fit max-md:min-w-56 max-sm:min-w-[192px] luxury-card product-luxury"
                     v-for="product in products"
                 />
             </div>
 
             <a
                 :href="navigationLink"
-                class="secondary-button mx-auto mt-5 block w-max rounded-2xl px-11 py-3 text-center text-base max-lg:mt-0 max-lg:hidden max-lg:py-3.5 max-md:rounded-lg"
+                class="luxury-button mx-auto mt-8 block w-max rounded-2xl px-12 py-4 text-center text-base font-semibold tracking-wide shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 max-lg:mt-0 max-lg:hidden max-lg:py-3.5 max-md:rounded-lg max-md:px-10"
                 :aria-label="title"
                 v-if="navigationLink"
             >

@@ -2,7 +2,7 @@
 
 <v-topbar>
     <!-- Shimmer Effect -->
-    <div class="flex items-center justify-between border border-b border-l-0 border-r-0 border-t-0 px-16">
+    <div class="flex items-center justify-between border-b border-gold-700/20 bg-luxury-black px-16 text-gold-400">
         <!-- Currencies -->
         <div class="flex w-20 items-center justify-between gap-2.5 py-3">
             <div
@@ -55,7 +55,7 @@
         type="text/x-template"
         id="v-topbar-template"
     >
-        <div class="flex w-full items-center justify-between border border-b border-l-0 border-r-0 border-t-0 px-16">
+        <div class="flex w-full items-center justify-between border-b border-gold-700/20 bg-luxury-black px-16 text-gold-400">
             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.top.currency_switcher.before') !!}
 
             <!-- Currency Switcher -->
@@ -88,12 +88,12 @@
 
             {!! view_render_event('bagisto.shop.components.layouts.header.desktop.top.currency_switcher.after') !!}
 
-            <p class="py-3 text-xs font-medium">
+            <p class="py-3 text-xs font-medium tracking-wider uppercase text-gold-200">
                 {{ core()->getConfigData('general.content.header_offer.title') }}
-                
-                <a 
-                    href="{{ core()->getConfigData('general.content.header_offer.redirection_link') }}" 
-                    class="underline"
+
+                <a
+                    href="{{ core()->getConfigData('general.content.header_offer.redirection_link') }}"
+                    class="underline text-gold-400 hover:text-gold-300 transition-colors duration-300"
                     role="button"
                 >
                     {{ core()->getConfigData('general.content.header_offer.redirection_title') }}
@@ -149,11 +149,11 @@
         type="text/x-template"
         id="v-currency-switcher-template"
     >
-        <div class="my-2.5 grid gap-1 overflow-auto max-md:my-0 sm:max-h-[500px]">
+        <div class="my-2.5 grid gap-1 overflow-auto max-md:my-0 sm:max-h-[500px] bg-white">
             <span
-                class="cursor-pointer px-5 py-2 text-base hover:bg-gray-100"
+                class="cursor-pointer px-5 py-2 text-base hover:bg-gold-50 hover:text-gold-700 transition-colors duration-200"
                 v-for="currency in currencies"
-                :class="{'bg-gray-100': currency.code == '{{ core()->getCurrentCurrencyCode() }}'}"
+                :class="{'bg-gold-50 text-gold-700': currency.code == '{{ core()->getCurrentCurrencyCode() }}'}"
                 @click="change(currency)"
             >
                 @{{ currency.symbol + ' ' + currency.code }}
@@ -165,12 +165,12 @@
         type="text/x-template"
         id="v-locale-switcher-template"
     >
-        <div class="my-2.5 grid gap-1 overflow-auto max-md:my-0 sm:max-h-[500px]">
+        <div class="my-2.5 grid gap-1 overflow-auto max-md:my-0 sm:max-h-[500px] bg-white">
             <span
-                class="flex cursor-pointer items-center gap-2.5 px-5 py-2 text-base hover:bg-gray-100"
-                :class="{'bg-gray-100': locale.code == '{{ app()->getLocale() }}'}"
+                class="flex cursor-pointer items-center gap-2.5 px-5 py-2 text-base hover:bg-gold-50 hover:text-gold-700 transition-colors duration-200"
+                :class="{'bg-gold-50 text-gold-700': locale.code == '{{ app()->getLocale() }}'}"
                 v-for="locale in locales"
-                @click="change(locale)"                  
+                @click="change(locale)"
             >
                 <img
                     :src="locale.logo_url || '{{ bagisto_asset('images/default-language.svg') }}'"

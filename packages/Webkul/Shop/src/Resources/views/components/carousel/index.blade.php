@@ -11,20 +11,20 @@
         type="text/x-template"
         id="v-carousel-template"
     >
-        <div class="relative m-auto flex w-full overflow-hidden">
+        <div class="relative m-auto flex w-full overflow-hidden rounded-xl overflow-hidden shadow-2xl">
             <!-- Slider -->
             <div 
                 class="inline-flex translate-x-0 cursor-pointer transition-transform duration-700 ease-out will-change-transform"
                 ref="sliderContainer"
             >
                 <div
-                    class="max-h-screen w-screen bg-cover bg-no-repeat"
+                    class="max-h-screen w-screen bg-cover bg-no-repeat relative group"
                     v-for="(image, index) in images"
                     @click="visitLink(image)"
                     ref="slide"
                 >
                     <x-shop::media.images.lazy
-                        class="aspect-[2.743/1] max-h-full w-full max-w-full select-none transition-transform duration-300 ease-in-out"
+                        class="aspect-[2.743/1] max-h-full w-full max-w-full select-none transition-all duration-500 ease-in-out group-hover:scale-105"
                         ::lazy="false"
                         ::src="image.image"
                         ::srcset="image.image + ' 1920w, ' + image.image.replace('storage', 'cache/large') + ' 1280w,' + image.image.replace('storage', 'cache/medium') + ' 1024w, ' + image.image.replace('storage', 'cache/small') + ' 525w'"
@@ -32,15 +32,23 @@
                         tabindex="0"
                         fetchpriority="high"
                     />
+                    <!-- Elegant Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                    <!-- Title Overlay -->
+                    <div v-if="image.title" class="absolute bottom-0 left-0 right-0 p-8 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                        <h3 class="font-playfair text-3xl font-semibold mb-2">@{{ image.title }}</h3>
+                        <p v-if="image.description" class="text-lg opacity-90">@{{ image.description }}</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Navigation -->
+            <!-- Elegant Navigation -->
             <span
-                class="icon-arrow-left absolute left-2.5 top-1/2 -mt-[22px] hidden w-auto rounded-full bg-black/80 p-3 text-2xl font-bold text-white opacity-30 transition-all md:inline-block"
+                class="icon-arrow-left absolute left-6 top-1/2 -mt-[22px] hidden w-14 h-14 rounded-full bg-gradient-to-r from-black/70 to-black/50 backdrop-blur-sm p-4 text-2xl font-bold text-white opacity-0 transition-all duration-300 md:inline-block border border-white/20 shadow-lg"
                 :class="{
-                    'cursor-not-allowed': direction == 'ltr' && currentIndex == 0,
-                    'cursor-pointer hover:opacity-100': direction == 'ltr' ? currentIndex > 0 : currentIndex <= 0
+                    'cursor-not-allowed opacity-30': direction == 'ltr' && currentIndex == 0,
+                    'cursor-pointer hover:opacity-100 hover:scale-110 hover:bg-gradient-to-r hover:from-black/80 hover:to-black/60': direction == 'ltr' ? currentIndex > 0 : currentIndex <= 0,
+                    'translate-x-0': direction == 'ltr' ? currentIndex > 0 : currentIndex <= 0
                 }"
                 role="button"
                 aria-label="@lang('shop::components.carousel.previous')"
@@ -51,10 +59,11 @@
             </span>
 
             <span
-                class="icon-arrow-right absolute right-2.5 top-1/2 -mt-[22px] hidden w-auto rounded-full bg-black/80 p-3 text-2xl font-bold text-white opacity-30 transition-all md:inline-block"
+                class="icon-arrow-right absolute right-6 top-1/2 -mt-[22px] hidden w-14 h-14 rounded-full bg-gradient-to-r from-black/70 to-black/50 backdrop-blur-sm p-4 text-2xl font-bold text-white opacity-0 transition-all duration-300 md:inline-block border border-white/20 shadow-lg"
                 :class="{
-                    'cursor-not-allowed': direction == 'rtl' && currentIndex == 0,
-                    'cursor-pointer hover:opacity-100': direction == 'rtl' ? currentIndex < 0 : currentIndex >= 0
+                    'cursor-not-allowed opacity-30': direction == 'rtl' && currentIndex == 0,
+                    'cursor-pointer hover:opacity-100 hover:scale-110 hover:bg-gradient-to-r hover:from-black/80 hover:to-black/60': direction == 'rtl' ? currentIndex < 0 : currentIndex >= 0,
+                    'translate-x-0': direction == 'rtl' ? currentIndex < 0 : currentIndex >= 0
                 }"
                 role="button"
                 aria-label="@lang('shop::components.carousel.next')"
@@ -64,12 +73,15 @@
             >
             </span>
 
-            <!-- Pagination -->
-            <div class="absolute bottom-5 left-0 flex w-full justify-center max-md:bottom-3.5 max-sm:bottom-2.5">
+            <!-- Elegant Pagination -->
+            <div class="absolute bottom-8 left-0 flex w-full justify-center max-md:bottom-6 max-sm:bottom-4">
                 <div
                     v-for="(image, index) in images"
-                    class="mx-1 h-3 w-3 cursor-pointer rounded-full max-md:h-2 max-md:w-2 max-sm:h-1.5 max-sm:w-1.5"
-                    :class="{ 'bg-navyBlue': index === Math.abs(currentIndex), 'opacity-30 bg-gray-500': index !== Math.abs(currentIndex) }"
+                    class="mx-2 h-3 w-3 cursor-pointer rounded-full transition-all duration-300 max-md:h-2.5 max-md:w-2.5 max-md:mx-1.5 max-sm:h-2 max-sm:w-2 max-sm:mx-1"
+                    :class="{ 
+                        'bg-gradient-to-r from-yellow-400 to-yellow-500 w-10 shadow-lg shadow-yellow-400/50': index === Math.abs(currentIndex), 
+                        'bg-white/30 hover:bg-white/50 hover:scale-125': index !== Math.abs(currentIndex) 
+                    }"
                     role="button"
                     tabindex="0"
                     @click="navigateByPagination(index)"

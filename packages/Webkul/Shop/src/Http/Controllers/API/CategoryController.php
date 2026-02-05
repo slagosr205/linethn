@@ -4,6 +4,7 @@ namespace Webkul\Shop\Http\Controllers\API;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 use Webkul\Attribute\Enums\AttributeTypeEnum;
 use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\Category\Repositories\CategoryRepository;
@@ -40,7 +41,12 @@ class CategoryController extends APIController
             'locale' => app()->getLocale(),
         ];
 
-        $categories = $this->categoryRepository->getAll(array_merge($defaultParams, request()->all()));
+        $params = array_merge($defaultParams, request()->all());
+        $cacheKey = 'categories_' . md5(serialize($params) . '_' . core()->getCurrentChannel()->id);
+
+        $categories = Cache::remember($cacheKey, 900, function () use ($params) {
+            return $this->categoryRepository->getAll($params);
+        });
 
         return CategoryResource::collection($categories);
     }
@@ -50,7 +56,15 @@ class CategoryController extends APIController
      */
     public function tree(): JsonResource
     {
-        $categories = $this->categoryRepository->getVisibleCategoryTree(core()->getCurrentChannel()->root_category_id);
+        $channelId = core()->getCurrentChannel()->id;
+        $rootCategoryId = core()->getCurrentChannel()->root_category_id;
+        $locale = app()->getLocale();
+
+        $cacheKey = 'category_tree_' . $channelId . '_' . $rootCategoryId . '_' . $locale;
+
+        $categories = Cache::remember($cacheKey, 1800, function () use ($rootCategoryId) {
+            return $this->categoryRepository->getVisibleCategoryTree($rootCategoryId);
+        });
 
         return CategoryTreeResource::collection($categories);
     }
